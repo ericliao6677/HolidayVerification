@@ -2,6 +2,7 @@
 using Holiday.API.Domain.Entity;
 using Holiday.API.Domain.Request.Get;
 using Holiday.API.Domain.Request.Post;
+using Holiday.API.Domain.Request.Put;
 using Holiday.API.Domain.Response;
 using Holiday.API.Repositories.Interface;
 using Holiday.API.Services.Interface;
@@ -55,10 +56,17 @@ public class HolidayService : IHolidayService
 
         var result = await _holidayRepository.DeleteByIdAsync(id);
 
-        if (result)
-            return ResultResponseExtension.Command.DeleteSuccess();
-        return ResultResponseExtension.Command.DeleteFail();
+        if (!result) return ResultResponseExtension.Command.DeleteFail();
+        return ResultResponseExtension.Command.DeleteSuccess();
 
+    }
+
+    public async Task<ResultResponse> UpdateAsync(PutHolidayRequest request)
+    {
+        var entity = _mapper.Map<HolidayEntity>(request);
+        var result = await _holidayRepository.UpdateAsync(entity);
+        if (!result) return ResultResponseExtension.Command.UpdateFail();
+        return ResultResponseExtension.Command.UpdateSuccess();
     }
 }
 

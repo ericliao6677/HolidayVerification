@@ -35,8 +35,16 @@ namespace Holiday.API.Repositories.Interface
         /// <returns></returns>
         Task<bool> InsertAsync(HolidayEntity entity);
 
+
+        Task<bool> UpdateAsync(HolidayEntity entity);
+        /// <summary>
+        /// 單筆刪除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<bool> DeleteByIdAsync(int id);
 
+        
        
 
     }

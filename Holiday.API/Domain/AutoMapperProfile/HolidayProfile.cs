@@ -2,6 +2,7 @@
 using Holiday.API.Domain.Entity;
 using Holiday.API.Domain.Request.Get;
 using Holiday.API.Domain.Request.Post;
+using Holiday.API.Domain.Request.Put;
 
 namespace Holiday.API.Domain.AutoMapperProfile
 {
@@ -11,6 +12,7 @@ namespace Holiday.API.Domain.AutoMapperProfile
         {
             CreateMap<QueryHolidayRequest, HolidayEntity>();
             CreateMap<PostHolidayRequest, HolidayEntity>();
+            CreateMap<PutHolidayRequest, HolidayEntity>();
         }
     }
 }

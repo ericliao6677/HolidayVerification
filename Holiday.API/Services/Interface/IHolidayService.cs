@@ -1,5 +1,6 @@
 ﻿using Holiday.API.Domain.Request.Get;
 using Holiday.API.Domain.Request.Post;
+using Holiday.API.Domain.Request.Put;
 using Holiday.API.Domain.Response;
 
 namespace Holiday.API.Services.Interface
@@ -15,5 +16,7 @@ namespace Holiday.API.Services.Interface
         Task<ResultResponse> InsertAsync(PostHolidayRequest request);
 
         Task<ResultResponse> DeletebyIdAsync(int id);
+
+        Task<ResultResponse> UpdateAsync(PutHolidayRequest request);
     }
 }

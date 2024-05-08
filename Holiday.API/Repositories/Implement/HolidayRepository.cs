@@ -111,9 +111,9 @@ namespace Holiday.API.Repositories.Implement
 
             var para = new DynamicParameters(entity);
 
-            int AffectRow = await conn.ExecuteAsync(insertString, para);
+            int AffectedRow = await conn.ExecuteAsync(insertString, para);
 
-            return AffectRow > 0;
+            return AffectedRow > 0;
         }
 
         public async Task<bool> DeleteByIdAsync(int id)
@@ -124,9 +124,27 @@ namespace Holiday.API.Repositories.Implement
             var deleteString = @"DELETE FROM [dbo].[Holiday]
                                  WHERE Id = @id";
 
-            int AffectRow = await conn.ExecuteAsync(deleteString, new { id = id });
+            int AffectedRow = await conn.ExecuteAsync(deleteString, new { id = id });
 
-            return AffectRow > 0;
+            return AffectedRow > 0;
+        }
+
+        public async Task<bool> UpdateAsync(HolidayEntity entity)
+        {
+            using var conn = _connection.GetConnection;
+
+            var updateString = @"UPDATE [dbo].[Holiday]
+                                   SET [Date] = @date
+                                      ,[Name] = @name
+                                      ,[IsHoliday] = @isHoliday
+                                      ,[HolidayCategory] = @holidayCategory
+                                      ,[Discription] = @discription
+                                 WHERE [Id] = @id";
+
+            var para = new DynamicParameters(entity);
+
+            int AffectedRow = await conn.ExecuteAsync(updateString, para);
+            return AffectedRow > 0;
         }
     }
 }

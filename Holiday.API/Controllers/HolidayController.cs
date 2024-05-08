@@ -1,5 +1,6 @@
 ﻿using Holiday.API.Domain.Request.Get;
 using Holiday.API.Domain.Request.Post;
+using Holiday.API.Domain.Request.Put;
 using Holiday.API.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,13 @@ namespace Holiday.API.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _service.DeletebyIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] PutHolidayRequest request)
+        {
+            var result = await _service.UpdateAsync(request);
             return Ok(result);
         }
 
