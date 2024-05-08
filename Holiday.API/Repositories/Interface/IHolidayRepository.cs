@@ -35,7 +35,11 @@ namespace Holiday.API.Repositories.Interface
         /// <returns></returns>
         Task<bool> InsertAsync(HolidayEntity entity);
 
-
+        /// <summary>
+        /// 單筆修改
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         Task<bool> UpdateAsync(HolidayEntity entity);
         /// <summary>
         /// 單筆刪除
