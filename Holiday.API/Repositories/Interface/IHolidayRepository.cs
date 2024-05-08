@@ -33,7 +33,11 @@ namespace Holiday.API.Repositories.Interface
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> InserAsync(HolidayEntity entity);
+        Task<bool> InsertAsync(HolidayEntity entity);
+
+        Task<bool> DeleteByIdAsync(int id);
+
+       
 
     }
 }

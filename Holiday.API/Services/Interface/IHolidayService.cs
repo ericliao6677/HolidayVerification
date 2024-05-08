@@ -13,5 +13,7 @@ namespace Holiday.API.Services.Interface
         Task<ResultResponse> GetByIdAsync(int id);
 
         Task<ResultResponse> InsertAsync(PostHolidayRequest request);
+
+        Task<ResultResponse> DeletebyIdAsync(int id);
     }
 }

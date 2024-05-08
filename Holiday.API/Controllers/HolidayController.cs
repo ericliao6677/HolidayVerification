@@ -44,7 +44,13 @@ namespace Holiday.API.Controllers
             var result = await _service.InsertAsync(request);
             return Ok(result);
         }
-        
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var result = await _service.DeletebyIdAsync(id);
+            return Ok(result);
+        }
 
 
     }

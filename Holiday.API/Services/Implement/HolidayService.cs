@@ -43,9 +43,22 @@ public class HolidayService : IHolidayService
     public async Task<ResultResponse> InsertAsync(PostHolidayRequest request)
     {
         var entity = _mapper.Map<HolidayEntity>(request);
-        var result = await _holidayRepository.InserAsync(entity);
+        var result = await _holidayRepository.InsertAsync(entity);
         if (!result) return ResultResponseExtension.Command.InsertFail();
         return ResultResponseExtension.Command.InsertSuccess();
+    }
+
+    public async Task<ResultResponse> DeletebyIdAsync(int id)
+    {
+        var holiday = await _holidayRepository.GetByIdAsync(id);
+        if (holiday is null) return ResultResponseExtension.Command.QueryNotFound(id.ToString());
+
+        var result = await _holidayRepository.DeleteByIdAsync(id);
+
+        if (result)
+            return ResultResponseExtension.Command.DeleteSuccess();
+        return ResultResponseExtension.Command.DeleteFail();
+
     }
 }
 

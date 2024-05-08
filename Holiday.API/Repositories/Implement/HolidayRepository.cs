@@ -16,7 +16,7 @@ namespace Holiday.API.Repositories.Implement
         {
             _connection = connection;
         }
-
+   
         public async Task<IEnumerable<HolidayEntity>> GetAsync(HolidayEntity? entity)
         {
             var queryString = "";
@@ -90,7 +90,7 @@ namespace Holiday.API.Repositories.Implement
             return result;
         }
 
-        public async Task<bool> InserAsync(HolidayEntity entity)
+        public async Task<bool> InsertAsync(HolidayEntity entity)
         {
             using var conn = _connection.GetConnection;
 
@@ -112,6 +112,19 @@ namespace Holiday.API.Repositories.Implement
             var para = new DynamicParameters(entity);
 
             int AffectRow = await conn.ExecuteAsync(insertString, para);
+
+            return AffectRow > 0;
+        }
+
+        public async Task<bool> DeleteByIdAsync(int id)
+        {
+
+            using var conn = _connection.GetConnection;
+
+            var deleteString = @"DELETE FROM [dbo].[Holiday]
+                                 WHERE Id = @id";
+
+            int AffectRow = await conn.ExecuteAsync(deleteString, new { id = id });
 
             return AffectRow > 0;
         }
