@@ -10,6 +10,8 @@ namespace Holiday.API.Services.Interface
         
         Task<ResultResponse> GetByDateAsync(DateTime date);
 
+        Task<ResultResponse> GetByIdAsync(int id);
+
         Task<ResultResponse> InsertAsync(PostHolidayRequest request);
     }
 }

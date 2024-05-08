@@ -48,7 +48,7 @@ namespace Holiday.API.Repositories.Implement
 
                 return await conn.QueryAsync<HolidayEntity>(queryString);
             }
-          
+
             return await conn.QueryAsync<HolidayEntity>(queryString);
 
         }
@@ -70,6 +70,23 @@ namespace Holiday.API.Repositories.Implement
             para.Add("Date", date);
 
             var result = await conn.QuerySingleOrDefaultAsync<HolidayEntity>(queryString, para);
+            return result;
+        }
+
+        public async Task<HolidayEntity?> GetByIdAsync(int id)
+        {
+            using var conn = _connection.GetConnection;
+
+            var queryString = @"SELECT [Id]
+                                      ,[Date]
+                                      ,[name]
+                                      ,[isHoliday]
+                                      ,[holidayCategory]
+                                      ,[discription]
+                                FROM [dbo].[Holiday]
+                                WHERE [Id] = @id";
+
+            var result = await conn.QuerySingleOrDefaultAsync<HolidayEntity>(queryString, new { id = id });
             return result;
         }
 
@@ -96,7 +113,7 @@ namespace Holiday.API.Repositories.Implement
 
             int AffectRow = await conn.ExecuteAsync(insertString, para);
 
-            return AffectRow > 0;          
+            return AffectRow > 0;
         }
     }
 }

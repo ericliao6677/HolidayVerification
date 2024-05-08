@@ -1,10 +1,14 @@
-﻿namespace Holiday.API.Domain.Response
+﻿using Holiday.API.Domain.Entity;
+
+namespace Holiday.API.Domain.Response
 {
     public class ResultResponseExtension
     {
         public static class Query
         {
             public static ResultResponse QuerySuccess(object data) => new ResultResponse(ReturnMessage: "查詢成功", ReturnData: data);
+            //public static ResultResponse<HolidayEntity> QuerySuccessG(HolidayEntity data) => new ResultResponse<HolidayEntity>(ReturnMessage: "查詢成功", ReturnData: data);
+
         }
         public static class Command
         {

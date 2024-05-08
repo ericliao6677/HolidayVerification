@@ -31,6 +31,13 @@ namespace Holiday.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            var result = await _service.GetByIdAsync(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody] PostHolidayRequest request)
         {

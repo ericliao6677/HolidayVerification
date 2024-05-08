@@ -21,6 +21,14 @@ namespace Holiday.API.Repositories.Interface
         Task<HolidayEntity?> GetByDateAsync(DateTime date);
 
         /// <summary>
+        /// 取得單筆，依id篩選
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<HolidayEntity?> GetByIdAsync(int id);
+        
+
+        /// <summary>
         /// 單筆新增
         /// </summary>
         /// <param name="entity"></param>

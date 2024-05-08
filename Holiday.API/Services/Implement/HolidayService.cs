@@ -29,7 +29,14 @@ public class HolidayService : IHolidayService
     public async Task<ResultResponse> GetByDateAsync(DateTime date)
     {
         var result = await _holidayRepository.GetByDateAsync(date);
-        if (result is null) return ResultResponseExtension.Command.QueryNotFound(date.Date.ToString());
+        if (result is null) return ResultResponseExtension.Command.QueryNotFound(date.ToString("yyyy/MM/dd"));
+        return ResultResponseExtension.Query.QuerySuccess(result);
+    }
+
+    public async Task<ResultResponse> GetByIdAsync(int id)
+    {
+        var result = await _holidayRepository.GetByIdAsync(id);
+        if (result is null) return ResultResponseExtension.Command.QueryNotFound(id.ToString());
         return ResultResponseExtension.Query.QuerySuccess(result);
     }
 
