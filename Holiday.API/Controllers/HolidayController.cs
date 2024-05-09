@@ -1,6 +1,7 @@
 ﻿using Holiday.API.Domain.Request.Get;
 using Holiday.API.Domain.Request.Post;
 using Holiday.API.Domain.Request.Put;
+using Holiday.API.Domain.Response;
 using Holiday.API.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,35 +20,46 @@ namespace Holiday.API.Controllers
             _service = service;
         }
 
+
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
         public async Task<IActionResult> Get([FromQuery] QueryHolidayRequest request)
         {
             var result = await _service.GetAsync(request);
             return Ok(result);
         }
 
+
+
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
         public async Task<IActionResult> GetByDate([FromQuery, Required(ErrorMessage ="日期欄位必填")] DateTime date)
         {
             var result = await _service.GetByDateAsync(date);
             return Ok(result);
         }
 
+
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var result = await _service.GetByIdAsync(id);
             return Ok(result);
         }
 
+
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> Insert([FromBody] PostHolidayRequest request)
         {
             var result = await _service.InsertAsync(request);
             return Ok(result);
         }
 
+
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _service.DeletebyIdAsync(id);
@@ -55,6 +67,7 @@ namespace Holiday.API.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> Put([FromBody] PutHolidayRequest request)
         {
             var result = await _service.UpdateAsync(request);

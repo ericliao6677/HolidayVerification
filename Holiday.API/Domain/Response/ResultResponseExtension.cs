@@ -1,4 +1,6 @@
-﻿using Holiday.API.Domain.Entity;
+﻿using Azure;
+using Holiday.API.Domain.Entity;
+using Holiday.API.Domain.Enum;
 
 namespace Holiday.API.Domain.Response
 {
@@ -6,18 +8,25 @@ namespace Holiday.API.Domain.Response
     {
         public static class Query
         {
-            public static ResultResponse QuerySuccess(object data) => new ResultResponse(ReturnMessage: "查詢成功", ReturnData: data);
-            //public static ResultResponse<HolidayEntity> QuerySuccessG(HolidayEntity data) => new ResultResponse<HolidayEntity>(ReturnMessage: "查詢成功", ReturnData: data);
+            public static ResultResponse QuerySuccess() => new ResultResponse(ReturnMessage: "查詢成功");
+            public static ResultResponse<TResponse> QuerySuccess<TResponse>(TResponse data) => new ResultResponse<TResponse> (ReturnMessage: "查詢成功", ReturnData: data);
 
         }
         public static class Command
         {
             public static ResultResponse SiginSuccess(string token) => new ResultResponse(ReturnMessage: "登入成功", ReturnData: token);
+
             public static ResultResponse InsertSuccess() => new ResultResponse(ReturnMessage: "新增成功");
             public static ResultResponse InsertFail(string? ex = null) => new ResultResponse(ReturnCode: Enum.ReturnCodeEnum.DBCommandFail, ReturnMessage: "新增失敗", ReturnData: ex);
             public static ResultResponse VaildDataError(string? content = null) => new ResultResponse(ReturnCode: Enum.ReturnCodeEnum.VaildDataError, ReturnMessage: "驗證錯誤", ReturnData: content);
+            
             public static ResultResponse UpdateSuccess() => new ResultResponse(ReturnMessage: "修改成功");
+
+
             public static ResultResponse QueryNotFound(string id) => new ResultResponse(ReturnCode: Enum.ReturnCodeEnum.QueryNotFound, ReturnMessage: $"查無此資料 {id}");
+            public static ResultResponse<TResponse> QueryNotFound<TResponse>(string id) => new ResultResponse<TResponse> (ReturnCode: Enum.ReturnCodeEnum.QueryNotFound, ReturnMessage: $"查無此資料 {id}");
+
+
             public static ResultResponse UpdateFail(string? ex = null) => new ResultResponse(ReturnCode: Enum.ReturnCodeEnum.DBCommandFail, ReturnMessage: "修改失敗", ReturnData: ex);
             public static ResultResponse DeleteSuccess() => new ResultResponse(ReturnMessage: "刪除成功");
             public static ResultResponse DeleteFail(string? ex = null) => new ResultResponse(ReturnMessage: "刪除失敗", ReturnData: ex);
