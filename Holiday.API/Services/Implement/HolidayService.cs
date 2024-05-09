@@ -24,14 +24,22 @@ public class HolidayService : IHolidayService
     {
         var entity = _mapper.Map<HolidayEntity>(request);
         var result = await _holidayRepository.GetAsync(entity);
-        return ResultResponseExtension.Query.QuerySuccess(result);
+        
+        var mappedResults = result.Select(item => { 
+            var mappedResult = _mapper.Map<QueryHolidayResponse>(item);
+            return mappedResult;
+        });
+
+        return ResultResponseExtension.Query.QuerySuccess(mappedResults);
     }
 
     public async Task<ResultResponse> GetByDateAsync(DateTime date)
     {
         var result = await _holidayRepository.GetByDateAsync(date);
         if (result is null) return ResultResponseExtension.Command.QueryNotFound(date.ToString("yyyy/MM/dd"));
-        return ResultResponseExtension.Query.QuerySuccess(result);
+
+        var mappedResult = _mapper.Map<QueryHolidayResponse>(result);
+        return ResultResponseExtension.Query.QuerySuccess(mappedResult);
     }
 
     public async Task<ResultResponse> GetByIdAsync(int id)
@@ -44,6 +52,7 @@ public class HolidayService : IHolidayService
     public async Task<ResultResponse> InsertAsync(PostHolidayRequest request)
     {
         var entity = _mapper.Map<HolidayEntity>(request);
+        entity.IsHoliday = true;
         var result = await _holidayRepository.InsertAsync(entity);
         if (!result) return ResultResponseExtension.Command.InsertFail();
         return ResultResponseExtension.Command.InsertSuccess();
@@ -58,7 +67,6 @@ public class HolidayService : IHolidayService
 
         if (!result) return ResultResponseExtension.Command.DeleteFail();
         return ResultResponseExtension.Command.DeleteSuccess();
-
     }
 
     public async Task<ResultResponse> UpdateAsync(PutHolidayRequest request)

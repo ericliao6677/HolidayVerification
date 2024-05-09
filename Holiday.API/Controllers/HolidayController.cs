@@ -4,6 +4,7 @@ using Holiday.API.Domain.Request.Put;
 using Holiday.API.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace Holiday.API.Controllers
@@ -25,8 +26,8 @@ namespace Holiday.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{date}")]
-        public async Task<IActionResult> GetByDate([FromRoute] DateTime date)
+        [HttpGet]
+        public async Task<IActionResult> GetByDate([FromQuery, Required(ErrorMessage ="日期欄位必填")] DateTime date)
         {
             var result = await _service.GetByDateAsync(date);
             return Ok(result);

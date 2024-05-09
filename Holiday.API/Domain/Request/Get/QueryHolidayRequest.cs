@@ -6,5 +6,6 @@ namespace Holiday.API.Domain.Request.Get
     {
 
         public bool? IsHoliday { get; set; }
+        public string? HolidayCategory { get; set; }
     }
 }
