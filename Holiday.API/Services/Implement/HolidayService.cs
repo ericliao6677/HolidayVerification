@@ -122,7 +122,6 @@ public class HolidayService : IHolidayService
         }
 
         //mapping資料
-
         var recordsMapped = records.Select(r =>
         {
             var entity = _mapper.Map<HolidayEntity>(r);

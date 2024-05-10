@@ -1,3 +1,4 @@
+using Holiday.API.Infrastructures.Cors;
 using Holiday.API.Infrastructures.DependecyInjection;
 using Holiday.API.Infrastructures.NSwag;
 
@@ -7,9 +8,13 @@ var env = builder.Environment;
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//add cors
+builder.Services.AddCorsSetting(env);
 
 // add OpenAPI
 builder.Services.AddNSwag(env);
@@ -35,6 +40,8 @@ app.UseReDoc((config) => config.Path = "/redoc");
 //}
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
