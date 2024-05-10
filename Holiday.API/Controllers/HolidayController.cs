@@ -22,7 +22,7 @@ namespace Holiday.API.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ResultResponse<QueryHolidayResponse>>))]
         public async Task<IActionResult> Get([FromQuery] QueryHolidayRequest request)
         {
             var result = await _service.GetAsync(request);
@@ -33,7 +33,7 @@ namespace Holiday.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
-        public async Task<IActionResult> GetByDate([FromQuery, Required(ErrorMessage ="日期欄位必填")] DateTime date)
+        public async Task<IActionResult> GetByDate([FromQuery, Required(ErrorMessage = "日期欄位必填")] DateTime date)
         {
             var result = await _service.GetByDateAsync(date);
             return Ok(result);
@@ -71,6 +71,14 @@ namespace Holiday.API.Controllers
         public async Task<IActionResult> Put([FromBody] PutHolidayRequest request)
         {
             var result = await _service.UpdateAsync(request);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
+        public async Task<IActionResult> InsertDataFromCsvFile(IFormFile file)
+        {
+            var result = await _service.ParseCsvFile(file);
             return Ok(result);
         }
 

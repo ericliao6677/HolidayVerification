@@ -1,11 +1,10 @@
-﻿namespace Holiday.API.Domain.Response
+﻿namespace Holiday.API.Domain.DTO
 {
-    public class QueryHolidayResponse
+    public class CsvFileDto
     {
-        public int Id { get; set; }
         public string Date { get; set; }
         public string? Name { get; set; }
-        public bool IsHoliday { get; set; }
+        public string IsHoliday { get; set; }
         public string HolidayCategory { get; set; }
         public string? Description { get; set; }
     }

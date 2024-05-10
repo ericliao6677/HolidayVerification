@@ -20,5 +20,7 @@ namespace Holiday.API.Services.Interface
         Task<ResultResponse> DeletebyIdAsync(int id);
 
         Task<ResultResponse> UpdateAsync(PutHolidayRequest request);
+
+        Task<ResultResponse> ParseCsvFile(IFormFile file);
     }
 }

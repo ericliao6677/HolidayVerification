@@ -48,6 +48,12 @@ namespace Holiday.API.Repositories.Interface
         /// <returns></returns>
         Task<bool> DeleteByIdAsync(int id);
 
+        /// <summary>
+        /// 解析excel並匯入資料庫
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> InsertParsedCsvData(IEnumerable<HolidayEntity> records);      
+
         
        
 

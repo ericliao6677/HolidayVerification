@@ -7,6 +7,6 @@
         public string? Name { get; set; }
         public bool? IsHoliday { get; set; }
         public string HolidayCategory { get; set; }
-        public string? Discription { get; set; }
+        public string? Description { get; set; }
     }
 }

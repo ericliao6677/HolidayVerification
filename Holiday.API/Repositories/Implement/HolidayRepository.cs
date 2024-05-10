@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
+using Holiday.API.Common.Extension;
 using Holiday.API.Domain.Entity;
 using Holiday.API.Domain.Request;
 using Holiday.API.Infrastructures.Database;
@@ -27,7 +28,7 @@ namespace Holiday.API.Repositories.Implement
                                       ,[name]
                                       ,[isHoliday]
                                       ,[holidayCategory]
-                                      ,[discription]
+                                      ,[Description]
                                 FROM [dbo].[Holiday]
                                 WHERE 1 = 1";
 
@@ -48,7 +49,7 @@ namespace Holiday.API.Repositories.Implement
                                       ,[name]
                                       ,[isHoliday]
                                       ,[holidayCategory]
-                                      ,[discription]
+                                      ,[Description]
                                 FROM [dbo].[Holiday]
                                 WHERE Date = @Date";
 
@@ -68,7 +69,7 @@ namespace Holiday.API.Repositories.Implement
                                       ,[name]
                                       ,[isHoliday]
                                       ,[holidayCategory]
-                                      ,[discription]
+                                      ,[Description]
                                 FROM [dbo].[Holiday]
                                 WHERE [Id] = @id";
 
@@ -85,13 +86,13 @@ namespace Holiday.API.Repositories.Implement
                                        ,[Name]
                                        ,[IsHoliday]
                                        ,[HolidayCategory]
-                                       ,[Discription])
+                                       ,[Description])
                                  VALUES
                                        (@date
                                        ,@name
                                        ,@isHoliday
                                        ,@holidayCategory
-                                       ,@discription)";
+                                       ,@description)";
 
             var para = new DynamicParameters(entity);
 
@@ -122,13 +123,34 @@ namespace Holiday.API.Repositories.Implement
                                       ,[Name] = @name
                                       ,[IsHoliday] = @isHoliday
                                       ,[HolidayCategory] = @holidayCategory
-                                      ,[Discription] = @discription
+                                      ,[description] = @Description
                                  WHERE [Id] = @id";
 
             var para = new DynamicParameters(entity);
 
             int AffectedRow = await conn.ExecuteAsync(updateString, para);
             return AffectedRow > 0;
+        }
+
+        public async Task<bool> InsertParsedCsvData(IEnumerable<HolidayEntity>? records)
+        {
+            using var conn = _connection.GetConnection;
+
+            var insertString = @"INSERT INTO [PublicHoliday_TW].[dbo].[HolidayT1]
+                                       ([Date]
+                                       ,[Name]
+                                       ,[IsHoliday]
+                                       ,[HolidayCategory]
+                                       ,[Description])
+                                 VALUES
+                                       (@Date
+                                       ,@Name
+                                       ,@IsHoliday
+                                       ,@HolidayCategory
+                                       ,@Description)";
+        
+            int affectedRow = await conn.ExecuteAsync(insertString, records);
+            return affectedRow > 0;
         }
     }
 }
