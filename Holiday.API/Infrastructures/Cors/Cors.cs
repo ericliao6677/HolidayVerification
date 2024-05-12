@@ -7,14 +7,14 @@ public static class Cors
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(
-                builder =>
+                policy =>
                 {
-                    if (env.IsDevelopment() || env.IsEnvironment("Testing"))
+                    if (env.IsDevelopment())
                     {
-                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "127.0.0.1")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
-                                .AllowCredentials();
+                                .AllowCredentials();                      
                     }
                 });
         });
