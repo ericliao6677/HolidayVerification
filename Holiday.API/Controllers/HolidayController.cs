@@ -22,7 +22,7 @@ namespace Holiday.API.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ResultResponse<QueryHolidayResponse>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<IEnumerable<QueryHolidayResponse>>))]
         public async Task<IActionResult> Get([FromQuery] QueryHolidayRequest request)
         {
             var result = await _service.GetAsync(request);
