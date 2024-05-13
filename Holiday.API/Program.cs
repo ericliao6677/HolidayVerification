@@ -1,50 +1,69 @@
 using Holiday.API.Infrastructures.Cors;
 using Holiday.API.Infrastructures.DependecyInjection;
+using Holiday.API.Infrastructures.Logging;
 using Holiday.API.Infrastructures.NSwag;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
+var config = builder.Configuration;
+SeriLogHelper.ConfigureSerilLogger(config);
 
 
-// Add services to the container.
-builder.Services.AddControllers();
+try
+{
+    // Add services to the container.
+    builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    // Serillog
+    builder.Services.AddSerilog();
 
-//add cors
-builder.Services.AddCorsSetting(env);
-
-// add OpenAPI
-builder.Services.AddNSwag(env);
-
-
-//AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-//DI
-builder.Services.AddInfrastructure();
-
-var app = builder.Build();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
 
-app.UseOpenApi();
-app.UseSwaggerUi();
-app.UseReDoc((config) => config.Path = "/redoc");
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+    // add OpenAPI
+    builder.Services.AddNSwag(env);
 
-app.UseHttpsRedirection();
+    //AutoMapper
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-app.UseCors();
+    //DI
+    builder.Services.AddInfrastructure();
 
-app.UseAuthorization();
+    //add cors
+    builder.Services.AddCorsSetting(env);
 
-app.MapControllers();
 
-app.Run();
+    var app = builder.Build();
+
+
+    app.UseOpenApi();
+    app.UseSwaggerUi();
+    app.UseReDoc((config) => config.Path = "/redoc");
+
+    //Logging
+    app.UseMiddleware<RequestResponseLoggingMiddleware>();
+    app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = SeriLogHelper.EnrichFromRequest);
+
+
+    app.UseHttpsRedirection();
+
+    app.UseCors();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Something went wrong");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
