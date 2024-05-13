@@ -1,0 +1,5 @@
+{"@t":"2024-05-13T02:30:00.6865081Z","@mt":"Now listening on: {address}","address":"https://localhost:7002","EventId":{"Id":14,"Name":"ListeningOnAddress"},"SourceContext":"Microsoft.Hosting.Lifetime"}
+{"@t":"2024-05-13T02:30:00.7089124Z","@mt":"Now listening on: {address}","address":"http://localhost:5017","EventId":{"Id":14,"Name":"ListeningOnAddress"},"SourceContext":"Microsoft.Hosting.Lifetime"}
+{"@t":"2024-05-13T02:30:00.7098290Z","@mt":"Application started. Press Ctrl+C to shut down.","SourceContext":"Microsoft.Hosting.Lifetime"}
+{"@t":"2024-05-13T02:30:00.7100498Z","@mt":"Hosting environment: {EnvName}","EnvName":"Development","SourceContext":"Microsoft.Hosting.Lifetime"}
+{"@t":"2024-05-13T02:30:00.7102784Z","@mt":"Content root path: {ContentRoot}","ContentRoot":"D:\\01_testProj\\Holiday\\Holiday.API","SourceContext":"Microsoft.Hosting.Lifetime"}
