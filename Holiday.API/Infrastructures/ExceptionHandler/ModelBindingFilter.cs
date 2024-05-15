@@ -2,22 +2,29 @@
 using Holiday.API.Domain.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Net;
 
 namespace Holiday.API.Infrastructures.ExceptionHandler
 {
-    public static class BadRequestExceptionHandler
+    public class ModelBindingFilter : Attribute, IActionFilter 
     {
-        public static BadRequestObjectResult TryHandler(ActionContext context)
-        {         
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
             var errors = context.ModelState
                 .Where(x => x.Value.ValidationState == ModelValidationState.Invalid)
                 .ToDictionary(
                     x => string.Join('.', x.Key.Split('.')).ToCamelCase(),
                     x => x.Value.Errors.Select(e => e.ErrorMessage)
                  );
-            return new BadRequestObjectResult(ResultResponseExtension.Exception.BadRequest(errors));
+
+            context.Result = new BadRequestObjectResult(ResultResponseExtension.Exception.BadRequest(errors));          
         }
 
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+
+        }
     }
 }

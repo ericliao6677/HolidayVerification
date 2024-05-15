@@ -1,6 +1,7 @@
 using Holiday.API.Infrastructures.Cors;
 using Holiday.API.Infrastructures.DependecyInjection;
 using Holiday.API.Infrastructures.ExceptionHandler;
+using Holiday.API.Infrastructures.JWTToken;
 using Holiday.API.Infrastructures.Logging;
 using Holiday.API.Infrastructures.NSwag;
 using Serilog;
@@ -13,12 +14,15 @@ SeriLogHelper.ConfigureSerilLogger(config);
 
 try
 {
-    // Add services to the container.
-    builder.Services.AddControllers()
-        .ConfigureApiBehaviorOptions(option =>
-        {
-            option.InvalidModelStateResponseFactory = context => BadRequestExceptionHandler.TryHandler(context);
-        });
+    //Add services to the container.
+    //builder.Services.AddControllers()
+    //    .ConfigureApiBehaviorOptions(option =>
+    //    {
+    //        option.InvalidModelStateResponseFactory = context => BadRequestExceptionHandler.TryHandler(context);
+    //    });
+
+    builder.Services.AddControllers();
+
 
     // Serillog
     builder.Services.AddSerilog();
@@ -41,7 +45,8 @@ try
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddProblemDetails();
 
-    // Jwt
+    // JWT
+    builder.Services.AddJWTTokenConfigurator(config);
 
 
     // Add cors
@@ -71,6 +76,8 @@ try
 
     app.UseCors();
 
+    //先驗證再授權
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

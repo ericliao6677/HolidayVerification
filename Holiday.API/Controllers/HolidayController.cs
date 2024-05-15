@@ -2,7 +2,9 @@
 using Holiday.API.Domain.Request.Post;
 using Holiday.API.Domain.Request.Put;
 using Holiday.API.Domain.Response;
+using Holiday.API.Infrastructures.ExceptionHandler;
 using Holiday.API.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +24,7 @@ namespace Holiday.API.Controllers
 
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<IEnumerable<QueryHolidayResponse>>))]
         public async Task<IActionResult> Get([FromQuery] QueryHolidayRequest request)
         {
@@ -50,6 +53,7 @@ namespace Holiday.API.Controllers
 
 
         [HttpPost]
+        [ModelBindingFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> Insert([FromBody] PostHolidayRequest request)
         {
