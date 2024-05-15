@@ -91,61 +91,49 @@ public class HolidayService : IHolidayService
 
     public async Task<ResultResponse> ParseCsvFile(IFormFile file)
     {
-        try
-        {
-            var readConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = true
-            };
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            var encoding = Encoding.GetEncoding("BIG-5");
         
-            using Stream stream = file.OpenReadStream();
-
-            using StreamReader reader = new StreamReader(stream, encoding);
-
-            using CsvReader csv = new CsvReader(reader, readConfiguration);
-
-            var records = csv.GetRecords<CsvFileDto>().ToList();
-
-
-            //檢查日期格式
-            foreach (var record in records)
-            {
-                var formatDateString = FormatDateExtension.FormatDate(record.Date);
-                if (!DateTime.TryParse(formatDateString, out var formatDateValue))
-                    return ResultResponseExtension.Command.InsertFail($"資料日期欄位不符，從第{records.IndexOf(record) + 2}開始");
-            }
-
-            //mapping資料
-            var recordsMapped = records.Select(r =>
-            {
-                var entity = _mapper.Map<HolidayEntity>(r);
-                entity.IsHoliday = r.IsHoliday == "是" ? true : false;
-                entity.Date = DateTime.Parse(FormatDateExtension.FormatDate(r.Date));
-                return entity;
-            });
-
-            var result = await _holidayRepository.InsertParsedCsvData(recordsMapped);
-
-            if (!result)
-                return ResultResponseExtension.Command.InsertFail();
-
-            return ResultResponseExtension.Command.InsertSuccess();
-        }
-        catch(Exception ex)
+        var readConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            return ResultResponseExtension.Command.InsertFail(ex.Message);
+            HasHeaderRecord = true
+        };
+
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        var encoding = Encoding.GetEncoding("BIG-5");
+
+        using Stream stream = file.OpenReadStream();
+
+        using StreamReader reader = new StreamReader(stream, encoding);
+
+        using CsvReader csv = new CsvReader(reader, readConfiguration);
+
+        var records = csv.GetRecords<CsvFileDto>().ToList();
+
+
+        //檢查日期格式
+        foreach (var record in records)
+        {
+            var formatDateString = FormatDateExtension.FormatDate(record.Date);
+            if (!DateTime.TryParse(formatDateString, out var formatDateValue))
+                return ResultResponseExtension.Command.InsertFail($"資料日期欄位不符，從第{records.IndexOf(record) + 2}開始");
         }
-        
+
+        //mapping資料
+        var recordsMapped = records.Select(r =>
+        {
+            var entity = _mapper.Map<HolidayEntity>(r);
+            entity.IsHoliday = r.IsHoliday == "是" ? true : false;
+            entity.Date = DateTime.Parse(FormatDateExtension.FormatDate(r.Date));
+            return entity;
+        });
+
+        var result = await _holidayRepository.InsertParsedCsvData(recordsMapped);
+
+        if (!result)
+            return ResultResponseExtension.Command.InsertFail();
+
+        return ResultResponseExtension.Command.InsertSuccess();
+
     }
-
-
-
-
-
-
 }
 

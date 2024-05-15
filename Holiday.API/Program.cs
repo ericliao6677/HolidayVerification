@@ -1,5 +1,6 @@
 using Holiday.API.Infrastructures.Cors;
 using Holiday.API.Infrastructures.DependecyInjection;
+using Holiday.API.Infrastructures.ExceptionHandler;
 using Holiday.API.Infrastructures.Logging;
 using Holiday.API.Infrastructures.NSwag;
 using Serilog;
@@ -23,29 +24,43 @@ try
     builder.Services.AddSwaggerGen();
 
 
-    // add OpenAPI
+    // Add OpenAPI
     builder.Services.AddNSwag(env);
 
-    //AutoMapper
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-    //DI
+    // DI
     builder.Services.AddInfrastructure();
 
-    //add cors
+    // AutoMapper
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    // Error Handler
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddProblemDetails();
+
+    // Jwt
+
+
+    // Add cors
     builder.Services.AddCorsSetting(env);
 
 
     var app = builder.Build();
 
-
+    // serve OpenAPI/Swagger documents
     app.UseOpenApi();
+
+    // serve Swagger UI
     app.UseSwaggerUi();
+
+    // serve ReDoc UI
     app.UseReDoc((config) => config.Path = "/redoc");
 
     //Logging
     app.UseMiddleware<RequestResponseLoggingMiddleware>();
     app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = SeriLogHelper.EnrichFromRequest);
+
+    // Error Handler
+    app.UseExceptionHandler();
 
 
     app.UseHttpsRedirection();
