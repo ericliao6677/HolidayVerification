@@ -14,7 +14,11 @@ SeriLogHelper.ConfigureSerilLogger(config);
 try
 {
     // Add services to the container.
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .ConfigureApiBehaviorOptions(option =>
+        {
+            option.InvalidModelStateResponseFactory = context => BadRequestExceptionHandler.TryHandler(context);
+        });
 
     // Serillog
     builder.Services.AddSerilog();
