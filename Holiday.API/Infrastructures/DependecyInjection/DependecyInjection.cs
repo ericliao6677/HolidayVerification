@@ -6,6 +6,7 @@ using Holiday.API.Services.Implement;
 using Holiday.API.Services.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Holiday.API.Infrastructures.DependecyInjection
 {
@@ -19,6 +20,8 @@ namespace Holiday.API.Infrastructures.DependecyInjection
             services.AddScoped<IHolidayService, HolidayService>();
 
             services.AddScoped<JWTTokenHelper>();
+            
+            services.AddSingleton<MemoryCacheService>();
         }
     }
 }

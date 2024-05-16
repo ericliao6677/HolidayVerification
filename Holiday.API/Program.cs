@@ -1,6 +1,7 @@
 using Holiday.API.Infrastructures.Cors;
 using Holiday.API.Infrastructures.DependecyInjection;
 using Holiday.API.Infrastructures.ExceptionHandler;
+using Holiday.API.Infrastructures.Filter;
 using Holiday.API.Infrastructures.JWTToken;
 using Holiday.API.Infrastructures.Logging;
 using Holiday.API.Infrastructures.NSwag;
@@ -22,7 +23,7 @@ try
     //        option.InvalidModelStateResponseFactory = context => BadRequestExceptionHandler.TryHandler(context);
     //    });
 
-    builder.Services.AddControllers(options =>options.Filters.Add(typeof(ModelBindingFilter)))
+    builder.Services.AddControllers(options => options.AddFilter())
         .ConfigureApiBehaviorOptions(options =>
         { 
             options.SuppressModelStateInvalidFilter = true; 
@@ -57,6 +58,9 @@ try
     // Add cors
     builder.Services.AddCorsSetting(env);
 
+    //cache
+    builder.Services.AddMemoryCache();
+
 
     var app = builder.Build();
 
@@ -82,6 +86,7 @@ try
     app.UseCors();
 
     //先驗證再授權
+    //app.UseMiddleware<CheckblacklistMiddleware>();
     app.UseAuthentication();
     app.UseAuthorization();
 

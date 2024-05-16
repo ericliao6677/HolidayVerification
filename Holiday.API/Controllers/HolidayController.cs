@@ -22,7 +22,6 @@ namespace Holiday.API.Controllers
             _service = service;
         }
 
-
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<IEnumerable<QueryHolidayResponse>>))]
@@ -31,7 +30,6 @@ namespace Holiday.API.Controllers
             var result = await _service.GetAsync(request);
             return Ok(result);
         }
-
 
 
         [HttpGet]

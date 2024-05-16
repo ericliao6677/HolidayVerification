@@ -8,13 +8,15 @@ namespace Holiday.API.Infrastructures.JWTToken
     public class JWTTokenHelper
     {
         private readonly IConfiguration _configuration;
+        //private readonly HttpContext _context;
 
         public JWTTokenHelper(IConfiguration configuration)
         {
             _configuration = configuration;
+            //_context = context;
         }
 
-        public string GenerateToken(int expireMinutes = 480)
+        public string GenerateToken(int expireMinutes = 1)
         {
             var issuer = _configuration.GetValue<string>("JwtSettings:Issuer");
             var signKey = _configuration.GetValue<string>("JwtSettings:SignKey");
@@ -24,7 +26,6 @@ namespace Holiday.API.Infrastructures.JWTToken
             claims.Add(new Claim(ClaimTypes.Role, "Customer"));
             claims.Add(new Claim(ClaimTypes.Role, "employee"));
             
-
 
             var userClaimIdentity = new ClaimsIdentity(claims);
 
@@ -46,6 +47,16 @@ namespace Holiday.API.Infrastructures.JWTToken
             var serializeToken = tokenHandler.WriteToken(securityToken);
 
             return serializeToken;
+        }
+
+       
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix 時間戳是從 1970 年 1 月 1 日 (UTC) 開始的秒數
+            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var utcDateTime = unixEpoch.AddSeconds(unixTimeStamp);
+            var localDateTime = utcDateTime.ToLocalTime();
+            return localDateTime;
         }
 
     }
