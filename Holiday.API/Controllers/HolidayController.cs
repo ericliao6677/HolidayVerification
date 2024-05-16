@@ -53,7 +53,6 @@ namespace Holiday.API.Controllers
 
 
         [HttpPost]
-        [ModelBindingFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> Insert([FromBody] PostHolidayRequest request)
         {

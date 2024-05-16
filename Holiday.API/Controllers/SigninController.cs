@@ -26,5 +26,7 @@ namespace Holiday.API.Controllers
             return Ok(ResultResponseExtension.Command.SiginSuccess(this._jWTTokenHelper.GenerateToken()));
         }
 
+        
+
     }
 }

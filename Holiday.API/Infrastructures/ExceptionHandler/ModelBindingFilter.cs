@@ -8,23 +8,27 @@ using System.Net;
 
 namespace Holiday.API.Infrastructures.ExceptionHandler
 {
-    public class ModelBindingFilter : Attribute, IActionFilter 
+    public class ModelBindingFilter : IActionFilter 
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            var errors = context.ModelState
+            
+                      
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (!context.ModelState.IsValid)
+            {
+                var errors = context.ModelState
                 .Where(x => x.Value.ValidationState == ModelValidationState.Invalid)
                 .ToDictionary(
                     x => string.Join('.', x.Key.Split('.')).ToCamelCase(),
                     x => x.Value.Errors.Select(e => e.ErrorMessage)
                  );
 
-            context.Result = new BadRequestObjectResult(ResultResponseExtension.Exception.BadRequest(errors));          
-        }
-
-        public void OnActionExecuting(ActionExecutingContext context)
-        {
-
+                context.Result = new BadRequestObjectResult(ResultResponseExtension.Exception.BadRequest(errors));
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using Holiday.API.Infrastructures.ExceptionHandler;
 using Holiday.API.Infrastructures.JWTToken;
 using Holiday.API.Infrastructures.Logging;
 using Holiday.API.Infrastructures.NSwag;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,15 +22,19 @@ try
     //        option.InvalidModelStateResponseFactory = context => BadRequestExceptionHandler.TryHandler(context);
     //    });
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>options.Filters.Add(typeof(ModelBindingFilter)))
+        .ConfigureApiBehaviorOptions(options =>
+        { 
+            options.SuppressModelStateInvalidFilter = true; 
+        });
 
 
     // Serillog
     builder.Services.AddSerilog();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    //builder.Services.AddEndpointsApiExplorer();
+    //builder.Services.AddSwaggerGen();
 
 
     // Add OpenAPI
