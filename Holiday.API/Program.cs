@@ -83,6 +83,8 @@ try
 
     app.UseHttpsRedirection();
 
+    app.UseStaticFiles();
+
     app.UseCors();
 
     //先驗證再授權
