@@ -153,5 +153,22 @@ namespace Holiday.API.Repositories.Implement
             int affectedRow = await conn.ExecuteAsync(insertString, records);
             return affectedRow > 0;
         }
+
+        public async Task<IEnumerable<HolidayEntity>> GetUploadFileDataAsync()
+        {
+            using var conn = _connection.GetConnection;
+
+            var queryString = @"SELECT [Id]
+                                      ,[Date]
+                                      ,[name]
+                                      ,[isHoliday]
+                                      ,[holidayCategory]
+                                      ,[Description]
+                                FROM [PublicHoliday_TW].[dbo].[HolidayT1]";
+
+            
+            var result = await conn.QueryAsync<HolidayEntity>(queryString);
+            return result.OrderBy(x => x.Date);
+        }
     }
 }

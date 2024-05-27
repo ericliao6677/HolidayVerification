@@ -79,11 +79,16 @@ namespace Holiday.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse))]
         public async Task<IActionResult> InsertDataFromCsvFile(IFormFile file)
         {
-            throw new Exception("error!!!!!!!!!");
             var result = await _service.ParseCsvFile(file);
             return Ok(result);
         }
 
-
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<QueryHolidayResponse>))]
+        public async Task<IActionResult> GetUploadFileData()
+        {
+            var result = await _service.GetUploadFileDataAsync();
+            return Ok(result);
+        }
     }
 }

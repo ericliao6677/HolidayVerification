@@ -96,7 +96,7 @@ public class HolidayService : IHolidayService
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        var encoding = Encoding.GetEncoding("BIG-5");
+        var encoding = Encoding.GetEncoding("BIG5");
 
         using Stream stream = file.OpenReadStream();
 
@@ -131,6 +131,13 @@ public class HolidayService : IHolidayService
 
         return ResultResponseExtension.Command.InsertSuccess();
 
+    }
+
+    public async Task<ResultResponse<IEnumerable<QueryHolidayResponse>>> GetUploadFileDataAsync()
+    {
+        var result = await _holidayRepository.GetUploadFileDataAsync();
+        var mappedResults = _mapper.Map<IEnumerable<QueryHolidayResponse>>(result);
+        return ResultResponseExtension.Query.QuerySuccess(mappedResults);
     }
 }
 

@@ -52,10 +52,11 @@ namespace Holiday.API.Repositories.Interface
         /// 解析excel並匯入資料庫
         /// </summary>
         /// <returns></returns>
-        Task<bool> InsertParsedCsvData(IEnumerable<HolidayEntity> records);      
+        Task<bool> InsertParsedCsvData(IEnumerable<HolidayEntity> records);
 
-        
-       
+        Task<IEnumerable<HolidayEntity>> GetUploadFileDataAsync();
+
+
 
     }
 }
