@@ -23,7 +23,7 @@ namespace Holiday.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+       
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<IEnumerable<QueryHolidayResponse>>))]
         public async Task<IActionResult> Get([FromQuery] QueryHolidayRequest request)
         {
@@ -32,9 +32,9 @@ namespace Holiday.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("{date}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultResponse<QueryHolidayResponse>))]
-        public async Task<IActionResult> GetByDate([FromQuery, Required(ErrorMessage = "日期欄位必填")] DateTime date)
+        public async Task<IActionResult> GetByDate([FromRoute] string date)
         {
             var result = await _service.GetByDateAsync(date);
             return Ok(result);

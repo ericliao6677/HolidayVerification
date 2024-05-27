@@ -56,7 +56,7 @@ try
 
 
     // Add cors
-    builder.Services.AddCorsSetting(env);
+    //builder.Services.AddCorsSetting(env);
 
     //cache
     builder.Services.AddMemoryCache();
@@ -83,7 +83,7 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseCors();
+    //app.UseCors();
 
     //先驗證再授權
     //app.UseMiddleware<CheckblacklistMiddleware>();

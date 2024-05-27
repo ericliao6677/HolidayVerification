@@ -10,6 +10,7 @@ using Holiday.API.Domain.Request.Put;
 using Holiday.API.Domain.Response;
 using Holiday.API.Repositories.Interface;
 using Holiday.API.Services.Interface;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -33,20 +34,17 @@ public class HolidayService : IHolidayService
     {
         var entity = _mapper.Map<HolidayEntity>(request);
         var result = await _holidayRepository.GetAsync(entity);
-
-        var mappedResults = result.Select(item =>
-        {
-            var mappedResult = _mapper.Map<QueryHolidayResponse>(item);
-            return mappedResult;
-        });
+      
+        var mappedResults = _mapper.Map<IEnumerable<QueryHolidayResponse>>(result);
 
         return ResultResponseExtension.Query.QuerySuccess(mappedResults);
     }
 
-    public async Task<ResultResponse<QueryHolidayResponse>> GetByDateAsync(DateTime date)
+    public async Task<ResultResponse<QueryHolidayResponse>> GetByDateAsync(string date)
     {
-        var result = await _holidayRepository.GetByDateAsync(date);
-        if (result is null) return ResultResponseExtension.Command.QueryNotFound<QueryHolidayResponse>(date.ToString("yyyy/MM/dd"));
+        var parsedDate = DateTime.Parse(date);
+        var result = await _holidayRepository.GetByDateAsync(parsedDate);
+        if (result is null) return ResultResponseExtension.Command.QueryNotFound<QueryHolidayResponse>(parsedDate.ToString("yyyy/MM/dd"));
 
         var mappedResult = _mapper.Map<QueryHolidayResponse>(result);
         return ResultResponseExtension.Query.QuerySuccess(mappedResult);
@@ -64,7 +62,6 @@ public class HolidayService : IHolidayService
     public async Task<ResultResponse> InsertAsync(PostHolidayRequest request)
     {
         var entity = _mapper.Map<HolidayEntity>(request);
-        entity.IsHoliday = true;
         var result = await _holidayRepository.InsertAsync(entity);
         if (!result) return ResultResponseExtension.Command.InsertFail();
         return ResultResponseExtension.Command.InsertSuccess();

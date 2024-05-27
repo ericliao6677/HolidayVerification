@@ -14,16 +14,20 @@ namespace Holiday.API.Domain.AutoMapperProfile
         public HolidayProfile()
         {
             CreateMap<QueryHolidayRequest, HolidayEntity>();
-            CreateMap<PostHolidayRequest, HolidayEntity>();
-            CreateMap<PutHolidayRequest, HolidayEntity>();
+            CreateMap<PostHolidayRequest, HolidayEntity>()
+                .ForMember(dest => dest.IsHoliday, opt => opt.MapFrom(src => src.IsHoliday == "是" ? true : false));
+
+            CreateMap<PutHolidayRequest, HolidayEntity>()
+                .ForMember(dest => dest.IsHoliday, opt => opt.MapFrom(src => src.IsHoliday == "是" ? true : false)); ;
 
             CreateMap<HolidayEntity, QueryHolidayResponse>()
-                .AfterMap((src, dest) => { dest.Date = src.Date.ToString("yyyy/MM/dd"); });
+                .ForMember(dest => dest.IsHoliday, opt => opt.MapFrom(src => src.IsHoliday == true ? "是" : "否")) 
+                .AfterMap((src, dest) => { dest.Date = src.Date.ToString("yyyy-MM-dd"); });
 
             CreateMap<CsvFileDto, HolidayEntity>()
-                .ForMember(scr => scr.Date, dest => dest.Ignore())
-                .ForMember(scr => scr.IsHoliday, dest => dest.Ignore());
-              
+                .ForMember(src => src.Date, dest => dest.Ignore())
+                .ForMember(src => src.IsHoliday, dest => dest.Ignore());
+
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Holiday.API.Services.Interface
 
         Task<ResultResponse<IEnumerable<QueryHolidayResponse>>> GetAsync(QueryHolidayRequest request);
 
-        Task<ResultResponse<QueryHolidayResponse>> GetByDateAsync(DateTime date);
+        Task<ResultResponse<QueryHolidayResponse>> GetByDateAsync(string date);
 
         Task<ResultResponse<QueryHolidayResponse>> GetByIdAsync(int id);
 

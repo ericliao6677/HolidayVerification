@@ -37,7 +37,8 @@ namespace Holiday.API.Repositories.Implement
                 if (entity.IsHoliday is not null) { queryString += @" AND [IsHoliday] = @isHoliday"; }
                 if (!String.IsNullOrEmpty(entity.HolidayCategory)) { queryString += @" AND [HolidayCategory] = @holidayCategory"; }
             }
-            return await conn.QueryAsync<HolidayEntity>(queryString, entity);
+            var result = await conn.QueryAsync<HolidayEntity>(queryString, entity);
+            return result.OrderBy(x=>x.Date);
         }
 
         public async Task<HolidayEntity?> GetByDateAsync(DateTime date)
@@ -109,9 +110,9 @@ namespace Holiday.API.Repositories.Implement
             var deleteString = @"DELETE FROM [dbo].[Holiday]
                                  WHERE Id = @id";
 
-            int AffectedRow = await conn.ExecuteAsync(deleteString, new { id = id });
+            int affectedRow = await conn.ExecuteAsync(deleteString, new { id = id });
 
-            return AffectedRow > 0;
+            return affectedRow > 0;
         }
 
         public async Task<bool> UpdateAsync(HolidayEntity entity)
